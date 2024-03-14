@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://plugin.powerschool.pearson.com" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        description="" 
+        name="PowerQuery Template Examples" 
+        version="1.0.0" 
+        xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd">
+    <publisher name="Daniel Finger">
+        <contact email="daniel.finger@d300.org"/>
+    </publisher>
+</plugin>

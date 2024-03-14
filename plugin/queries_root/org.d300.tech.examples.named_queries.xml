@@ -1,0 +1,118 @@
+<queries>
+    <query name="org.d300.tech.examples.template_with_args" flattened="true">
+        <args>
+            <arg name="curyear_id" column="TERMS.YEARID" required="true" description="Current Year ID" type="primitive" />
+        </args>
+        <columns>
+            <column column="STUDENTS.STUDENT_NUMBER">Student_Number</column>
+            <column column="STUDENTS.STATE_STUDENTNUMBER">State_StudentNumber</column>
+            <column column="STUDENTS.LAST_NAME">Student_Last_Name</column>
+            <column column="STUDENTS.FIRST_NAME">Student_First_Name</column>
+            <column column="STUDENTS.GENDER">Student_Gender</column>
+            <column column="STUDENTS.DOB">Student_DOB</column>
+            <column column="STUDENTS.GRADE_LEVEL">Student_Grade_level</column>
+            <column column="STUDENTS.ZIP">Student_Zip</column>
+            <column column="COURSES.COURSE_NAME">course_Name</column>
+            <column column="CC.SECTION_NUMBER">section_Number</column>
+            <column column="CC.EXPRESSION">Expression</column>
+            <column column="USERS.LAST_NAME">User_Last_Name</column>
+            <column column="USERS.FIRST_NAME">User_First_Name</column>
+            <column column="USERS.EMAIL_ADDR">User_Email_Addr</column>
+            <column column="SCHOOLS.ID">School_ID</column>
+            <column column="SCHOOLS.NAME">School_Name</column>
+        </columns>
+        <sql>
+            <![CDATA[
+				SELECT DISTINCT
+					STUDENTS.STUDENT_NUMBER "Student_Number",
+					STUDENTS.STATE_STUDENTNUMBER "State_StudentNumber",
+					STUDENTS.LAST_NAME "Student_Last_Name",
+					STUDENTS.FIRST_NAME "Student_First_Name",
+					STUDENTS.GENDER "Student_Gender",
+					TO_CHAR(STUDENTS.DOB,'MM/DD/YYYY') "Student_DOB",
+					STUDENTS.GRADE_LEVEL "Student_Grade_level",
+					SUBSTR(STUDENTS.ZIP, 1, 6) "Student_Zip",
+					COURSES.COURSE_NAME "course_Name",
+					CC.SECTION_NUMBER "section_Number",
+					CC.EXPRESSION "Expression",
+					USERS.LAST_NAME "User_Last_Name",
+					USERS.FIRST_NAME "User_First_Name",
+					USERS.EMAIL_ADDR "User_Email_Addr",
+					SCHOOLS.ID "School_ID",
+					SCHOOLS.NAME "School_Name"
+				FROM STUDENTS 
+				-- Course
+				INNER JOIN CC ON CC.STUDENTID = STUDENTS.ID
+				INNER JOIN COURSES ON COURSES.COURSE_NUMBER = CC.COURSE_NUMBER
+				INNER JOIN SCHOOLS ON SCHOOLS.SCHOOL_NUMBER = CC.SCHOOLID
+				INNER JOIN TERMS ON TERMS.ID = CC.TERMID
+					AND TERMS.SCHOOLID = CC.SCHOOLID
+				-- Staff
+				INNER JOIN SCHOOLSTAFF ON SCHOOLSTAFF.ID = CC.TEACHERID
+					AND SCHOOLSTAFF.SCHOOLID = CC.SCHOOLID
+				INNER JOIN USERS ON USERS.DCID = SCHOOLSTAFF.USERS_DCID
+				WHERE TERMS.YEARID = :curyear_id 
+					AND STUDENTS.ENROLL_STATUS = 0
+            ]]>
+        </sql>
+    </query>
+    <query name="org.d300.tech.examples.template" flattened="true">
+        <columns>
+            <column column="STUDENTS.STUDENT_NUMBER">Student_Number</column>
+            <column column="STUDENTS.STATE_STUDENTNUMBER">State_StudentNumber</column>
+            <column column="STUDENTS.LAST_NAME">Student_Last_Name</column>
+            <column column="STUDENTS.FIRST_NAME">Student_First_Name</column>
+            <column column="STUDENTS.GENDER">Student_Gender</column>
+            <column column="STUDENTS.DOB">Student_DOB</column>
+            <column column="STUDENTS.GRADE_LEVEL">Student_Grade_level</column>
+            <column column="STUDENTS.ZIP">Student_Zip</column>
+            <column column="COURSES.COURSE_NAME">course_Name</column>
+            <column column="CC.SECTION_NUMBER">section_Number</column>
+            <column column="CC.EXPRESSION">Expression</column>
+            <column column="USERS.LAST_NAME">User_Last_Name</column>
+            <column column="USERS.FIRST_NAME">User_First_Name</column>
+            <column column="USERS.EMAIL_ADDR">User_Email_Addr</column>
+            <column column="SCHOOLS.ID">School_ID</column>
+            <column column="SCHOOLS.NAME">School_Name</column>
+        </columns>
+        <sql>
+            <![CDATA[
+				SELECT DISTINCT
+					STUDENTS.STUDENT_NUMBER "Student_Number",
+					STUDENTS.STATE_STUDENTNUMBER "State_StudentNumber",
+					STUDENTS.LAST_NAME "Student_Last_Name",
+					STUDENTS.FIRST_NAME "Student_First_Name",
+					STUDENTS.GENDER "Student_Gender",
+					TO_CHAR(STUDENTS.DOB,'MM/DD/YYYY') "Student_DOB",
+					STUDENTS.GRADE_LEVEL "Student_Grade_level",
+					SUBSTR(STUDENTS.ZIP, 1, 6) "Student_Zip",
+					COURSES.COURSE_NAME "course_Name",
+					CC.SECTION_NUMBER "section_Number",
+					CC.EXPRESSION "Expression",
+					USERS.LAST_NAME "User_Last_Name",
+					USERS.FIRST_NAME "User_First_Name",
+					USERS.EMAIL_ADDR "User_Email_Addr",
+					SCHOOLS.ID "School_ID",
+					SCHOOLS.NAME "School_Name"
+				FROM STUDENTS 
+				-- Course
+				INNER JOIN CC ON CC.STUDENTID = STUDENTS.ID
+				INNER JOIN COURSES ON COURSES.COURSE_NUMBER = CC.COURSE_NUMBER
+				INNER JOIN SCHOOLS ON SCHOOLS.SCHOOL_NUMBER = CC.SCHOOLID
+				INNER JOIN TERMS ON TERMS.ID = CC.TERMID
+					AND TERMS.SCHOOLID = CC.SCHOOLID
+				-- Staff
+				INNER JOIN SCHOOLSTAFF ON SCHOOLSTAFF.ID = CC.TEACHERID
+					AND SCHOOLSTAFF.SCHOOLID = CC.SCHOOLID
+				INNER JOIN USERS ON USERS.DCID = SCHOOLSTAFF.USERS_DCID
+				WHERE TERMS.YEARID = (
+						SELECT DISTINCT CALENDARYEAR
+						FROM DISTRICTCALENDAR
+						WHERE STARTDATE <= SYSDATE
+							AND ENDDATE >= SYSDATE
+					)
+					AND STUDENTS.ENROLL_STATUS = 0
+            ]]>
+        </sql>
+    </query>
+</queries>
