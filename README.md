@@ -4,7 +4,7 @@ This is a PowerSchool Plugin Package with examples of PowerQueries to use for Sc
 
 ## Installation
 
-Install as a normal PowerSchool Plugin. Ensure the plugin is enabled after it is finished installing.
+Zip the "plugin.xml" and the "queries_root" and install as a normal PowerSchool Plugin. Ensure the plugin is enabled after it is finished installing.
 
 ## Configuration
 
